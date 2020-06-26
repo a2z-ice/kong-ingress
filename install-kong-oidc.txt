@@ -5,6 +5,10 @@ docker run -d --name kong-database \
 -e "POSTGRES_HOST_AUTH_METHOD=trust" \
 postgres:11-alpine
 
+
+# Build kong oidc image first from docker file
+docker build -t kong:1.4-centos-oidc -f oidc.Dockerfile .
+
 docker run --rm --network=kong-net \
 -e "KONG_DATABASE=postgres" \
 -e "KONG_PG_HOST=kong-database" \

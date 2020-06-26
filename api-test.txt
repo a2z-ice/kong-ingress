@@ -31,6 +31,28 @@ curl -s -X POST http://localhost:8001/routes \
 response:
 {"id":"ad211276-d300-43c9-a1b6-7d437f4a1240","path_handling":"v0","paths":["\/mock"],"destinations":null,"headers":null,"protocols":["http","https"],"methods":null,"snis":null,"service":{"id":"0b361bb9-274e-4c05-91ad-844b85673b25"},"name":null,"strip_path":true,"preserve_host":false,"regex_priority":0,"updated_at":1593159524,"sources":null,"hosts":null,"https_redirect_status_code":426,"tags":null,"created_at":1593159524}   
 
+# keycloak introspection settings
+curl -X PATCH http://localhost:8001/plugins/${PLUGIN_ID} \
+    -d config.introspection_endpoint=https://ixx.xx.com/auth/realms/rand/protocol/openid-connect/token/introspect
+
+ACCESS_TOKEN=$(curl -s https://ixx.xx.com/auth/realms/rand/protocol/openid-connect/token \
+  -d grant_type=client_credentials \
+  -d client_id=kong \
+  -d client_secret=${CLIENT_SECRET} \
+  | jq -r .access_token)
+
+
+  curl -s -X POST https://ixx.xx.com/auth/realms/rand/protocol/openid-connect/token/introspect \
+  -d token=${ACCESS_TOKEN} \
+  -d client_id=kong \
+  -d client_secret=${CLIENT_SECRET}
+
+  Response:
+  {"exp":1593181258,"iat":1593180958,"jti":"fad2794d-a172-487f-a440-dff79b442bb0","iss":"https://xx.xx.com/auth/realms/rand","aud":"account","sub":"28b78e39-ca7c-466c-9653-0b27d9506502","typ":"Bearer","azp":"kong","session_state":"8fbcfda8-97b5-4eaa-bf40-cee6c6824e3c","preferred_username":"service-account-kong","email_verified":false,"acr":"1","realm_access":{"roles":["offline_access","uma_authorization"]},"resource_access":{"account":{"roles":["manage-account","manage-account-links","view-profile"]}},"scope":"profile email","clientHost":"103.192.159.166","clientId":"kong","clientAddress":"103.192.159.166","client_id":"kong","username":"service-account-kong","active":true}
+
+
+
+
 # check
 curl -s http://localhost/mock
 

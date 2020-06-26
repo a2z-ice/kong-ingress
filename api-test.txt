@@ -59,14 +59,14 @@ curl -s http://localhost/mock
 # Add keycloak as plugins
 Kong:
 client: kong
-Secret: 1bc146bc-3a1a-4750-bceb-6c2cddd5bb07
+Secret: $CLIENT_SECRET
 
 https://xx.xx.com/auth/realms/rand/.well-known/openid-configuration
 
 curl -s -X POST http://localhost:8001/plugins \
   -d name=oidc \
   -d config.client_id=kong \
-  -d config.client_secret=1bc146bc-3a1a-4750-bceb-6c2cddd5bb07 \
+  -d config.client_secret=$CLIENT_SECRET \
   -d config.discovery=https://xx.xx.com/auth/realms/rand/.well-known/openid-configuration 
   
   Response:

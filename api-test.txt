@@ -1,0 +1,53 @@
+#Create Service
+curl -s -X POST http://localhost:8001/services \
+    -d name=mock-service \
+    -d url=http://mockbin.org/request
+
+response:
+{
+    "client_certificate": null,
+    "connect_timeout": 60000,
+    "created_at": 1593159373,
+    "host": "mockbin.org",
+    "id": "0b361bb9-274e-4c05-91ad-844b85673b25",
+    "name": "mock-service",
+    "path": "/request",
+    "port": 80,
+    "protocol": "http",
+    "read_timeout": 60000,
+    "retries": 5,
+    "tags": null,
+    "updated_at": 1593159373,
+    "write_timeout": 60000
+}  
+
+
+#add route
+
+curl -s -X POST http://localhost:8001/routes \
+    -d service.id=0b361bb9-274e-4c05-91ad-844b85673b25 \
+    -d paths[]=/mock
+   
+response:
+{"id":"ad211276-d300-43c9-a1b6-7d437f4a1240","path_handling":"v0","paths":["\/mock"],"destinations":null,"headers":null,"protocols":["http","https"],"methods":null,"snis":null,"service":{"id":"0b361bb9-274e-4c05-91ad-844b85673b25"},"name":null,"strip_path":true,"preserve_host":false,"regex_priority":0,"updated_at":1593159524,"sources":null,"hosts":null,"https_redirect_status_code":426,"tags":null,"created_at":1593159524}   
+
+# check
+curl -s http://localhost/mock
+
+# Add keycloak as plugins
+Kong:
+client: kong
+Secret: 1bc146bc-3a1a-4750-bceb-6c2cddd5bb07
+
+https://xx.xx.com/auth/realms/rand/.well-known/openid-configuration
+
+curl -s -X POST http://localhost:8001/plugins \
+  -d name=oidc \
+  -d config.client_id=kong \
+  -d config.client_secret=1bc146bc-3a1a-4750-bceb-6c2cddd5bb07 \
+  -d config.discovery=https://xx.xx.com/auth/realms/rand/.well-known/openid-configuration 
+  
+  Response:
+  {"created_at":1593170187,"config":{"response_type":"code","introspection_endpoint":null,"filters":null,"bearer_only":"no","ssl_verify":"no","session_secret":null,"introspection_endpoint_auth_method":null,"realm":"kong","redirect_after_logout_uri":"\/","scope":"openid","token_endpoint_auth_method":"client_secret_post","logout_path":"\/logout","client_id":"kong","client_secret":"1bc146bc-3a1a-4750-bceb-6c2cddd5bb07","discovery":"https:\/\/xx.xx.com\/auth\/realms\/rand\/.well-known\/openid-configuration","recovery_page_path":null,"redirect_uri_path":null},"id":"07296a18-2678-4c39-a578-5a54c28f8036","service":null,"enabled":true,"protocols":["grpc","grpcs","http","https"],"name":"oidc","consumer":null,"route":null,"tags":null}
+
+  http://localhost/mock

@@ -31,6 +31,17 @@ curl -s -X POST http://localhost:8001/routes \
 response:
 {"id":"ad211276-d300-43c9-a1b6-7d437f4a1240","path_handling":"v0","paths":["\/mock"],"destinations":null,"headers":null,"protocols":["http","https"],"methods":null,"snis":null,"service":{"id":"0b361bb9-274e-4c05-91ad-844b85673b25"},"name":null,"strip_path":true,"preserve_host":false,"regex_priority":0,"updated_at":1593159524,"sources":null,"hosts":null,"https_redirect_status_code":426,"tags":null,"created_at":1593159524}   
 
+
+#Enable/Configure OIDC
+HOST_IP=<keycloak domain name or ip>
+CLIENT_SECRET=<kong client secrete from keycloak>
+curl -s -X POST http://localhost:8001/plugins \
+  -d name=oidc \
+  -d config.client_id=kong \
+  -d config.client_secret=${CLIENT_SECRET} \
+  -d config.discovery=http://${HOST_IP}/auth/realms/rand/.well-known/openid-configuration \
+  
+
 # keycloak introspection settings
 curl -X PATCH http://localhost:8001/plugins/${PLUGIN_ID} \
     -d config.introspection_endpoint=https://ixx.xx.com/auth/realms/rand/protocol/openid-connect/token/introspect

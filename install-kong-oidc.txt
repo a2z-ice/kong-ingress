@@ -1,3 +1,5 @@
+docker network create -d bridge kong-net
+
 docker run -d --name kong-database \
 --restart=always --network=kong-net \
 -p 5432:5432 -e "POSTGRES_USER=kong" \

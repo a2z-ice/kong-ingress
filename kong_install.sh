@@ -5,7 +5,7 @@ docker network create -d bridge  kong-net
 docker run -d --name kong-database --restart=always --network=kong-net -p 5432:5432 -e "POSTGRES_USER=kong" -e "POSTGRES_DB=kong" -e "POSTGRES_HOST_AUTH_METHOD=trust" postgres:11-alpine
 
 # A docker image has been reated and pushed with assaduzzaman/kong-oidc in dockerhub
-docker build -t kong-oidc -f oidc-latest.Dockerfile
+docker build -t kong-oidc -f oidc-latest.Dockerfile .
 
 # Create kong table in kong database. Here we can use assaduzzaman/kong-oidc instead of kong-oidc:latest because I have already created kong image in my docker registry
 docker run --rm --network=kong-net  -e "KONG_DATABASE=postgres" -e "KONG_PG_HOST=kong-database" kong-oidc:latest kong migrations bootstrap

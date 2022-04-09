@@ -8,3 +8,4 @@ username: assad
 custom_id: assad
 credentials:
 - assad-jwt
+- api-user-acl

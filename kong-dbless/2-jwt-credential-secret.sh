@@ -1,4 +1,4 @@
-kubectl create secret generic assad-jwt  \
+kubectl create secret generic jwt-user-cred  \
   --from-literal=kongCredType=jwt \
   --from-file=rsa_public_key=key.pub  \
   --from-literal=key=jwt-user \ # jwt tokens ClientID which will be uniquely identified

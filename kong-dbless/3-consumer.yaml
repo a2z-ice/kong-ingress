@@ -7,5 +7,5 @@ metadata:
 username: jwt-user
 custom_id: jwt-user
 credentials:
-- assad-jwt
+- jwt-user-cred
 - api-user-acl

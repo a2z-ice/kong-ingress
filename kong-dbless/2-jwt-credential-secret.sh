@@ -1,7 +1,7 @@
 kubectl create secret generic assad-jwt  \
   --from-literal=kongCredType=jwt \
   --from-file=rsa_public_key=key.pub  \
-  --from-literal=key=jwt-user \
+  --from-literal=key=jwt-user \ # jwt tokens ClientID which will be uniquely identified
   --from-literal=algorithm=RS256
 
 # Added as consumer group which called acl credential

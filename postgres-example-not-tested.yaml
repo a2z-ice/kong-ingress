@@ -1,3 +1,4 @@
+#https://docs.konghq.com/gateway/latest/reference/configuration/#real_ip_header
 image:
   repository: kong
   tag: "2.1"

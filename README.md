@@ -16,6 +16,8 @@ Source: https://tech.aufomm.com/how-to-use-ip-restriction-plugin/
 Also take a look: https://joshuajordancallis.medium.com/kong-ip-restriction-plugin-within-kubernetes-1ab8386f7ca3
 
 https://docs.konghq.com/kubernetes-ingress-controller/latest/guides/preserve-client-ip/
+
+https://docs.konghq.com/gateway/latest/reference/configuration/#real_ip_header
 ```
 Extended information
 There is one settings users need to know about is how to get the correct client_ip when you are running Kong behind a proxy or load balancer. For more information about getting client ip behind proxy, please refer to this serverfault answer.

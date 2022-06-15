@@ -1,0 +1,70 @@
+image:
+  repository: kong
+  tag: "2.1"
+
+env:
+  prefix: /usr/local/kong/
+  database: postgres
+  pg_host: 
+    valueFrom:
+      secretKeyRef:
+        key: host
+        name: kong-postgres
+  pg_database:
+    valueFrom:
+      secretKeyRef:
+        key: database
+        name: kong-postgres
+  pg_user:
+    valueFrom:
+      secretKeyRef:
+        key: user
+        name: kong-postgres
+  pg_password:
+    valueFrom:
+      secretKeyRef:
+        key: password
+        name: kong-postgres
+  real_ip_header: proxy_protocol
+  real_ip_recursive: "on"
+  trusted_ips: 0.0.0.0/0
+  headers: "off"
+
+# Hybrid Mode Only
+cluster:
+  enabled: false
+  tls:
+    enabled: false
+
+# Kong Enterprise Only
+manager:
+  enabled: false
+  ingress:
+    enabled: false
+  http:
+    enabled: false
+  tls:
+    enabled: false
+
+# Kong Enterprise Only
+portal:
+  enabled: false
+  ingress:
+    enabled: false
+  http:
+    enabled: false
+  tls:
+    enabled: false
+
+# Kong Enterprise Only
+portalapi:
+  enabled: false
+  ingress:
+    enabled: false
+  http:
+    enabled: false
+  tls:
+    enabled: false
+
+postgresql:
+  enabled: false

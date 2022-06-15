@@ -12,7 +12,10 @@ https://github.com/gbbirkisson/kong-plugin-jwt-keycloak
 
 # Kong ip restriction when it behine proxy
 Source: https://tech.aufomm.com/how-to-use-ip-restriction-plugin/
+
 Also take a look: https://joshuajordancallis.medium.com/kong-ip-restriction-plugin-within-kubernetes-1ab8386f7ca3
+
+https://docs.konghq.com/kubernetes-ingress-controller/1.3.x/guides/preserve-client-ip/
 ```
 Extended information
 There is one settings users need to know about is how to get the correct client_ip when you are running Kong behind a proxy or load balancer. For more information about getting client ip behind proxy, please refer to this serverfault answer.

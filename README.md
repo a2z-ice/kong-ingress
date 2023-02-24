@@ -28,3 +28,34 @@ TRUSTED_IPS=proxy_ip, load_balancer_ip
 REAL_IP_HEADER=X-Forwarded-For
 REAL_IP_RECURSIVE=on
 ```
+
+#Trusted IP and set Other hreader as ClientIP example
+```
+KONG_ADMIN_ACCESS_LOG:        /dev/stdout
+      KONG_ADMIN_ERROR_LOG:         /dev/stderr
+      KONG_ADMIN_GUI_ACCESS_LOG:    /dev/stdout
+      KONG_ADMIN_GUI_ERROR_LOG:     /dev/stderr
+      KONG_ADMIN_LISTEN:            127.0.0.1:8444 http2 ssl
+      KONG_CLUSTER_LISTEN:          off
+      KONG_DATABASE:                postgres
+      KONG_KIC:                     on
+      KONG_LUA_PACKAGE_PATH:        /opt/?.lua;/opt/?/init.lua;;
+      KONG_NGINX_WORKER_PROCESSES:  2
+      KONG_PG_DATABASE:             kong
+      KONG_PG_HOST:                 kong-database.devpanel.svc.cluster.local
+      KONG_PG_PASSWORD:             xxxx
+      KONG_PG_USER:                 kong
+      KONG_PLUGINS:                 bundled
+      KONG_PORTAL_API_ACCESS_LOG:   /dev/stdout
+      KONG_PORTAL_API_ERROR_LOG:    /dev/stderr
+      KONG_PORT_MAPS:               80:8000, 443:8443
+      KONG_PREFIX:                  /kong_prefix/
+      KONG_PROXY_ACCESS_LOG:        /dev/stdout
+      KONG_PROXY_ERROR_LOG:         /dev/stderr
+      KONG_PROXY_LISTEN:            0.0.0.0:8000 proxy_protocol, 0.0.0.0:8443 ssl proxy_protocol
+      KONG_REAL_IP_HEADER:          proxy_protocol  <======================================== customization of ClientIP
+      KONG_STATUS_LISTEN:           0.0.0.0:8100
+      KONG_STREAM_LISTEN:           off
+      KONG_TRUSTED_IPS:             0.0.0.0/0,::/0 <========================================== Allow IPs
+    Mounts:
+```

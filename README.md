@@ -53,10 +53,10 @@ KONG_ADMIN_ACCESS_LOG:        /dev/stdout
       KONG_PROXY_ACCESS_LOG:        /dev/stdout
       KONG_PROXY_ERROR_LOG:         /dev/stderr
       KONG_PROXY_LISTEN:            0.0.0.0:8000 proxy_protocol, 0.0.0.0:8443 ssl proxy_protocol
-      KONG_REAL_IP_HEADER:          proxy_protocol  <======================================== customization of ClientIP
+      KONG_REAL_IP_HEADER:          proxy_protocol  <======================= customization of ClientIP
       KONG_STATUS_LISTEN:           0.0.0.0:8100
       KONG_STREAM_LISTEN:           off
-      KONG_TRUSTED_IPS:             0.0.0.0/0,::/0 <========================================== Allow IPs
+      KONG_TRUSTED_IPS:             0.0.0.0/0,::/0 <========================= Allow IPs
     Mounts:
 ```
 # For docker

@@ -59,3 +59,35 @@ KONG_ADMIN_ACCESS_LOG:        /dev/stdout
       KONG_TRUSTED_IPS:             0.0.0.0/0,::/0 <========================================== Allow IPs
     Mounts:
 ```
+# For docker
+```
+Now when we run below command from our host or a different VM
+
+1
+curl https://test.demofor.fun/echo -s | jq -r '.request.headers["x-forwarded-for"]'
+We should get something like 122.221.122.221, 108.162.249.37, 172.18.0.2.
+
+Understand IPs from x-forwarded-for headers
+Let’s take a look at these IP addresses
+
+122.221.122.221: This is my VM’s IP address which is the client IP I would like Kong to get and restrict on.
+172.18.0.2: This is a local IP address. If we check our container address, this is the IP of traefik container.
+108.162.249.37: This is a public IP address belongs to Cloudflare.
+Now we know 122.221.122.221 is the IP I want Kong to get, we need to put 172.18.0.2 and 108.162.249.37 as trusted ips.
+
+Deploy Kong with trusted_ips
+Let’s stop and re-create our Kong container with below commands.
+
+#Sources https://tech.aufomm.com/how-to-get-real-client-ip-when-kong-is-behind-cdn-and-loadbalancer/
+docker run --detach --rm \
+  --name kong \
+  --network traefik \
+  -p "8001:8001" \
+  -e "KONG_ADMIN_LISTEN=0.0.0.0:8001" \
+  -e "KONG_PROXY_LISTEN=0.0.0.0:8000" \
+  -e "KONG_DATABASE=off" \
+  -e "KONG_TRUSTED_IPS=108.162.249.37, 172.18.0.2" \
+  -e "KONG_REAL_IP_HEADER=X-Forwarded-For" \
+  -e "KONG_REAL_IP_RECURSIVE=on" \
+  kong:3.0-ubuntu
+```

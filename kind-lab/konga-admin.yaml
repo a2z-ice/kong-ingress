@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: kong
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  serviceName: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:      
+      - env:
+        - name: POSTGRES_USER
+          value: kong
+        - name: POSTGRES_PASSWORD
+          value: kong
+        - name: POSTGRES_DB
+          value: kong
+        image: postgres:9.5
+        name: postgres
+        ports:
+        - containerPort: 5432
+      terminationGracePeriodSeconds: 60
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: kong
+spec:
+  selector:
+    app: postgres
+  ports:
+    - name: psql
+      port: 5432        
+      protocol: TCP  
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: konga
+  namespace: kong  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: konga
+  template:
+    metadata:
+      labels:
+        app: konga    
+    spec:
+      containers:
+      - name: konga
+        image: pantsel/konga
+        env:
+        - name: NODE_ENV
+          value: development
+        - name: DB_ADAPTER
+          value: postgres
+        - name: DB_URI
+          value: postgresql://kong:kong@postgres:5432/konga_db
+        - name: TOKEN_SECRET
+          value: iu7YDcPLiZkozQXzZ9kka3Ee1Vid5ZgQ
+        ports:
+        - containerPort: 1337
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: konga-svc
+  namespace: kong
+spec:
+  type: NodePort
+  selector:
+    app: konga
+  ports:
+    - name: konga-port
+      port: 1337       
+      nodePort: 31337 
+
+

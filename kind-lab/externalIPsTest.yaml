@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: nginx
+  type: NodePort
+  externalIPs:
+  - 192.168.68.102 
+  - 192.168.68.103 
+  - 192.168.68.104 
+
+
+

@@ -1682,12 +1682,14 @@ spec:
           value: /dev/stderr
         - name: KONG_ROUTER_FLAVOR
           value: traditional
+#----------------------for kong ClientIP value from X-Forwarded-For header---          
         - name: KONG_TRUSTED_IPS
           value: 0.0.0.0/0,::/0
         - name: KONG_REAL_IP_HEADER
-          value: X-Forwarded-For
+          value: X-Forwarded-For 
         - name: KONG_REAL_IP_RECURSIVE
           value: "on"
+#--------------------------------end-------------------------------------------          
         image: kong:3.1
         lifecycle:
           preStop:

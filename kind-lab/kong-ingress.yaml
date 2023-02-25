@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    konghq.com/strip-path: "true"
+    kubernetes.io/ingress.class: kong
+  name: ingress-for-nginx
+spec:
+  rules:
+  - host: kong.api.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: nginx
+            port:
+              name: http
+        path: /api
+        pathType: ImplementationSpecific
+      - backend:
+          service:
+            name: echo-server
+            port:
+              name: http
+        path: /echo
+        pathType: ImplementationSpecific        
+      

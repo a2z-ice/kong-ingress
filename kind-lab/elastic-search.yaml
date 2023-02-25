@@ -1,41 +1,8 @@
-# create elk-logger-data folder in /mnt/nfs_share path of fns server mount directory
 # Namespace
 apiVersion: v1
 kind: Namespace
 metadata:
   name: elk-logger
-
----
-#Persistance volume
-# apiVersion: v1
-# kind: PersistentVolume
-# metadata:
-#   name: elk-logger-pv-nfs
-#   labels:
-#     type: elk-logger-pv-nfs
-# spec:
-#   storageClassName: manual
-#   capacity:
-#     storage: 20Gi
-#   accessModes:
-#     - ReadWriteMany
-#   nfs:
-#     server: 192.168.0.109
-#     path: "/mnt/nfs_share"
-
-# ---
-# apiVersion: v1
-# kind: PersistentVolumeClaim
-# metadata:
-#   name: elk-logger-pvc
-#   namespace: elk-logger
-# spec:
-#   storageClassName: manual
-#   accessModes:
-#     - ReadWriteMany
-#   resources:
-#     requests:
-#       storage: 15Gi       
 ---
 # RBAC authn and authz
 apiVersion: v1
@@ -84,6 +51,35 @@ roleRef:
   kind: ClusterRole
   name: elasticsearch-logging
   apiGroup: ""
+# ---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: elk-logger-pv-nfs
+#   labels:
+#     type: elk-logger-pv-nfs
+# spec:
+#   storageClassName: manual
+#   capacity:
+#     storage: 15Gi
+#   accessModes:
+#     - ReadWriteMany
+#   nfs:
+#     server: 192.168.0.109
+#     path: "/mnt/nfs_share"
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: elk-logger-pvc
+#   namespace: elk-logger
+# spec:
+#   storageClassName: manual
+#   accessModes:
+#     - ReadWriteMany
+#   resources:
+#     requests:
+#       storage: 15Gi       
 ---
 # Elasticsearch deployment itself
 apiVersion: apps/v1
@@ -112,11 +108,11 @@ spec:
         version: v6.2.4
         kubernetes.io/cluster-service: "true"
     spec:
+      serviceAccountName: elasticsearch-logging
       # volumes:
       # - name: elasticsearch-logging
       #   persistentVolumeClaim:
-      #     claimName: elk-logger-pvc    
-      serviceAccountName: elasticsearch-logging
+      #     claimName: elk-logger-pvc  
       containers:
       - image: k8s.gcr.io/elasticsearch:v6.2.4
         name: elasticsearch-logging
@@ -133,11 +129,19 @@ spec:
         - containerPort: 9300
           name: transport
           protocol: TCP
-        # volumeMounts:
+        volumeMounts:
         # - name: elasticsearch-logging
         #   mountPath: /data
         #   subPath: elk-logger-data
         env:
+        - name: CLUSTER_NAME
+          value: my-es
+        - name: NUMBER_OF_MASTERS
+          value: "1"
+        - name: NODE_MASTER
+          value: "true"  
+        - name: MINIMUM_MASTER_NODES
+          value: "1"      
         - name: "NAMESPACE"
           valueFrom:
             fieldRef:

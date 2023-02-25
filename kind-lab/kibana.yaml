@@ -50,8 +50,8 @@ spec:
     spec:
       # volumes:
       # - name: kibana-volume
-        persistentVolumeClaim:
-          claimName: elk-logger-pvc 
+        # persistentVolumeClaim:
+        #   claimName: elk-logger-pvc 
       containers:
       - name: kibana-logging
         image: docker.elastic.co/kibana/kibana-oss:6.2.4
